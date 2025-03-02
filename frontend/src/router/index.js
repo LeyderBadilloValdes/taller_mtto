@@ -1,19 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Login from '@/components/Login.vue';
-import HelloWorld from '@/components/HelloWorld.vue';
+import Dashboard from '@/components/Dashboard.vue';
 
 const routes = [
-  { path: '/', redirect: '/login' },
+  { path: '/', redirect: '/login' },  // Redirige a login al entrar en la raíz
   { 
     path: '/login', 
     component: Login,
-    meta: { title: 'Login - Inicio' } // 🔹 Establecer título de la pestaña
+    name: 'login',  // Asegúrate de darle un nombre a la ruta
+    meta: { title: 'Login - Inicio' } // Establecer título de la pestaña
   },
   { 
     path: '/dashboard', 
-    component: HelloWorld, 
-    meta: { requiresAuth: true, title: 'Dashboard' }  // 🔹 Cambiar el título aquí
-  }
+    component: Dashboard, 
+    meta: { requiresAuth: true, title: 'Dashboard' }  // Cambiar el título aquí
+  },
 ];
 
 const router = createRouter({
@@ -21,16 +22,17 @@ const router = createRouter({
   routes
 });
 
-// 🔹 Cambiar dinámicamente el título de la pestaña según la ruta
+// Cambiar dinámicamente el título de la pestaña según la ruta
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title || 'Mi Aplicación'; // Si no tiene title, usa un valor por defecto
   
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token');  // Obtener el token
 
+  // Si la ruta requiere autenticación y no tenemos token, redirigir al login
   if (to.meta.requiresAuth && !token) {
-    next('/login');  // 🔹 Si no está autenticado, enviarlo al login
+    next('/login');
   } else {
-    next();  // 🔹 Continuar con la navegación
+    next();  // Si tiene token o no requiere autenticación, continua con la navegación
   }
 });
 

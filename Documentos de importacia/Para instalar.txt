@@ -35,13 +35,6 @@ npm install -D tailwindcss postcss autoprefixer
 
 npm install bootstrap @popperjs/core
 
-modificar en el packeage.json 
-
- "scripts": {
-    "dev": "vite --host",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
 
 npm list --depth=0
 

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Login from '@/components/Login.vue';
 import Dashboard from '@/components/Dashboard.vue';
+import Catalogos from '@/components/Catalogos.vue';
 
 const routes = [
   { path: '/', redirect: '/login' },  // Redirige a login al entrar en la raíz
@@ -14,6 +15,11 @@ const routes = [
     path: '/dashboard', 
     component: Dashboard, 
     meta: { requiresAuth: true, title: 'Dashboard' }  // Cambiar el título aquí
+  },
+  { 
+    path: '/catalogos', 
+    component: Catalogos, 
+    meta: { requiresAuth: true, title: 'Catalogos' }  // Cambiar el título aquí
   },
 ];
 

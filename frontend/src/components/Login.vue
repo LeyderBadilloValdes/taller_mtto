@@ -29,7 +29,7 @@
 import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-
+import api from '@/api'; // Ajusta la ruta según tu estructura
 export default {
   setup() {
     const username = ref('');
@@ -52,11 +52,10 @@ export default {
       }
 
       try {
-        const response = await axios.post('http://192.168.0.101:8000/auth/token/login', {
+        const response = await api.post('/auth/token/login', {
           username: username.value,
           password: password.value
         });
-
         if (response.data && response.data.auth_token) {
           localStorage.setItem('token', response.data.auth_token);
           router.push('/dashboard');

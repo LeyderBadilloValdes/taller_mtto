@@ -5,19 +5,19 @@
 -- USE taller_mtto;
 -- DROP DATABASE taller_mtto;
 -- DROP VIEW IF EXISTS Reporte_Mantenimientos_Completo;
-
--- Crear la base de datos (si no existe)
+-- Crear la base de datos
 CREATE DATABASE IF NOT EXISTS taller_mtto;
 USE taller_mtto;
 
--- Tabla de Usuarios
-CREATE TABLE IF NOT EXISTS Usuarios (
-    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    rol ENUM('Admin', 'Tecnico', 'Supervisor') NOT NULL
+-- Tabla de Roles
+CREATE TABLE IF NOT EXISTS Rol (
+    id_rol INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) UNIQUE NOT NULL
 );
+
+-- Insertar roles por defecto
+INSERT INTO Rol (nombre) VALUES ('Admin'), ('Auxiliar de Mantenimiento')
+ON DUPLICATE KEY UPDATE nombre=nombre;
 
 -- Tabla de Equipos
 CREATE TABLE IF NOT EXISTS Equipos (
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS Mantenimientos (
     observaciones TEXT,
     estado_aprobacion ENUM('Pendiente Aprobacion', 'Aprobado', 'Rechazado') DEFAULT 'Pendiente Aprobacion',
     FOREIGN KEY (id_equipo) REFERENCES Equipos(id_equipo) ON DELETE CASCADE,
-    FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario) ON DELETE SET NULL
+    FOREIGN KEY (id_usuario) REFERENCES auth_user(id) ON DELETE SET NULL
 );
 
 -- Tabla de Aprobaciones de Mantenimiento
@@ -61,22 +61,10 @@ CREATE TABLE IF NOT EXISTS Aprobaciones_Mantenimientos (
     estado ENUM('Aprobado', 'Rechazado') NOT NULL,
     comentario TEXT,
     FOREIGN KEY (id_mantenimiento) REFERENCES Mantenimientos(id_mantenimiento) ON DELETE CASCADE,
-    FOREIGN KEY (id_usuario_aprobador) REFERENCES Usuarios(id_usuario) ON DELETE SET NULL
+    FOREIGN KEY (id_usuario_aprobador) REFERENCES auth_user(id) ON DELETE SET NULL
 );
 
--- Tabla de Piezas Reemplazadas
-CREATE TABLE IF NOT EXISTS Piezas_Reemplazadas (
-    id_pieza INT AUTO_INCREMENT PRIMARY KEY,
-    id_equipo INT,
-    nombre_pieza VARCHAR(100) NOT NULL,
-    fabricante_pieza VARCHAR(100),
-    fecha_instalacion DATE NOT NULL,
-    vida_util_estimada INT COMMENT 'En meses',
-    estado ENUM('Nueva', 'Usada', 'Defectuosa') DEFAULT 'Nueva',
-    FOREIGN KEY (id_equipo) REFERENCES Equipos(id_equipo) ON DELETE CASCADE
-);
-
--- Tabla de Archivos de Mantenimiento (Con control de versiones)
+-- Tabla de Archivos de Mantenimiento
 CREATE TABLE IF NOT EXISTS Archivos_Mantenimiento (
     id_archivo INT AUTO_INCREMENT PRIMARY KEY,
     id_mantenimiento INT,
@@ -96,48 +84,15 @@ CREATE TABLE IF NOT EXISTS Cronograma_Mantenimiento (
     fecha_programada DATE NOT NULL,
     anio INT GENERATED ALWAYS AS (YEAR(fecha_programada)) STORED,
     mes INT GENERATED ALWAYS AS (MONTH(fecha_programada)) STORED,
-    semana_anio INT GENERATED ALWAYS AS (WEEK(fecha_programada, 3)) STORED, -- Semana ISO 8601
+    semana_anio INT GENERATED ALWAYS AS (WEEK(fecha_programada, 3)) STORED,
     dia_mes INT GENERATED ALWAYS AS (DAY(fecha_programada)) STORED,
     responsable VARCHAR(100),
     estado ENUM('Pendiente', 'Realizado', 'Cancelado') DEFAULT 'Pendiente',
     FOREIGN KEY (id_equipo) REFERENCES Equipos(id_equipo) ON DELETE CASCADE
 );
 
--- Vista: Reporte Completo de Mantenimientos
-CREATE OR REPLACE VIEW Reporte_Mantenimientos_Completo AS
-SELECT 
-    m.id_mantenimiento, 
-    e.nombre AS equipo, 
-    u.nombre AS responsable,
-    m.tipo_mantenimiento, 
-    m.fecha_realizacion, 
-    m.observaciones, 
-    m.estado_aprobacion AS estado_mantenimiento,  
-    a.fecha_aprobacion, 
-    a.estado AS estado_aprobacion_mantenimiento,  
-    a.comentario AS comentario_aprobacion, 
-    f.nombre_archivo, 
-    f.ruta_archivo, 
-    f.tipo_archivo, 
-    f.version
-FROM Mantenimientos m
-JOIN Equipos e ON m.id_equipo = e.id_equipo
-JOIN Usuarios u ON m.id_usuario = u.id_usuario
-LEFT JOIN Aprobaciones_Mantenimientos a ON m.id_mantenimiento = a.id_mantenimiento
-LEFT JOIN Archivos_Mantenimiento f ON m.id_mantenimiento = f.id_mantenimiento;
+-- Crear un usuario por defecto en auth_user con rol Admin
+-- Se crea con python manage.py createsuperuser
 
--- Vista: Cronograma de Mantenimiento por Mes y Semana
-CREATE OR REPLACE VIEW Vista_Cronograma_Mantenimiento AS
-SELECT 
-    c.id_cronograma,
-    e.nombre AS equipo,
-    c.tipo_actividad,
-    c.fecha_programada,
-    c.anio,
-    c.mes,
-    c.semana_anio,
-    c.dia_mes,
-    c.responsable,
-    c.estado
-FROM Cronograma_Mantenimiento c
-JOIN Equipos e ON c.id_equipo = e.id_equipo;
+-- Asignar el rol Admin al usuario creado
+INSERT INTO Rol (nombre) VALUES ('Admin') ON DUPLICATE KEY UPDATE nombre=nombre;

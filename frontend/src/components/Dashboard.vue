@@ -1,28 +1,53 @@
 <template>
 
-    <!-- Botón para abrir el modal de Crear Usuario -->
-    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalUsuario">
-    Crear Usuario
-  </button>
+<!-- Contenedor principal centrado -->
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    
+    <!-- Card: Crear Usuario -->
+    <div class="col-6 col-md-3 mb-3">
+      <div class="card text-center shadow-sm p-3" data-bs-toggle="modal" data-bs-target="#modalUsuario">
+        <div class="card-body">
+          <i class="bi bi-person-plus fs-1 text-success"></i>
+          <h6 class="mt-2">Crear Usuario</h6>
+        </div>
+      </div>
+    </div>
 
-  <!-- Botón para abrir el modal de Crear Equipo -->
-  <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalEquipo">
-    Crear Equipo
-  </button>
+    <!-- Card: Crear Equipo -->
+    <div class="col-6 col-md-3 mb-3">
+      <div class="card text-center shadow-sm p-3" data-bs-toggle="modal" data-bs-target="#modalEquipo">
+        <div class="card-body">
+          <i class="bi bi-pc-display fs-1 text-success"></i>
+          <h6 class="mt-2">Crear Equipo</h6>
+        </div>
+      </div>
+    </div>
 
-  <!-- Botón para abrir el modal de Crear Mantenimiento -->
-  <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalMantenimiento">
-    Crear Mantenimiento
-  </button>
+    <!-- Card: Crear Mantenimiento -->
+    <div class="col-6 col-md-3 mb-3">
+      <div class="card text-center shadow-sm p-3" data-bs-toggle="modal" data-bs-target="#modalMantenimiento">
+        <div class="card-body">
+          <i class="bi bi-tools fs-1 text-success"></i>
+          <h6 class="mt-2">Crear Mantenimiento</h6>
+        </div>
+      </div>
+    </div>
 
-  <!-- Botón para abrir el modal de Crear Repuesto -->
-  <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalRepuesto">
-    Crear Repuesto
-  </button>
-  <!-- Botón para ir a Catálogos desde Dashboard -->
-  <button @click="irACatalogos" class="btn btn-primary">
-    Ir a Catálogos
-  </button>
+    <!-- Card: Crear Repuesto -->
+    <div class="col-6 col-md-3 mb-3">
+      <div class="card text-center shadow-sm p-3" data-bs-toggle="modal" data-bs-target="#modalRepuesto">
+        <div class="card-body">
+          <i class="bi bi-nut fs-1 text-success"></i>
+          <h6 class="mt-2">Crear Repuesto</h6>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
   <!-- Modal para Crear Usuario -->
   <div class="modal fade" id="modalUsuario" tabindex="-1" aria-labelledby="modalUsuarioLabel" aria-hidden="true">
     <div class="modal-dialog">

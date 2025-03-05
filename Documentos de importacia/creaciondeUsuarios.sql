@@ -11,4 +11,4 @@ INSERT INTO auth_user (username, email, password, is_active, is_staff, is_superu
 VALUES ('prueba', 'prueba@example.com', 'pbkdf2_sha256$260000$hash_aqui', 1, 0, 0, NOW());
 
 DELETE FROM auth_user WHERE username = 'prueba';
-DROP TABLE Usuarios_usuario;
+DROP TABLE usuarios;

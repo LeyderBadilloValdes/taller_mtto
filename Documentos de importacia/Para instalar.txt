@@ -3,6 +3,9 @@ Windows + R
 sysdm.cpl
 Colocarlo en el variables de entorno 
 
+.\venv\Scripts\activate
+
+
 python manage.py runserver 0.0.0.0:8000 
 definir la url de consulta en el api.js
 

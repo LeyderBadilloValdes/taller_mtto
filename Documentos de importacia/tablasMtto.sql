@@ -8,7 +8,7 @@
 -- Crear la base de datos
 CREATE DATABASE IF NOT EXISTS taller_mtto;
 USE taller_mtto;
-
+show tables;
 -- Tabla de Roles
 CREATE TABLE IF NOT EXISTS Rol (
     id_rol INT AUTO_INCREMENT PRIMARY KEY,
@@ -96,3 +96,5 @@ CREATE TABLE IF NOT EXISTS Cronograma_Mantenimiento (
 
 -- Asignar el rol Admin al usuario creado
 INSERT INTO Rol (nombre) VALUES ('Admin') ON DUPLICATE KEY UPDATE nombre=nombre;
+
+SELECT username, email FROM auth_user;

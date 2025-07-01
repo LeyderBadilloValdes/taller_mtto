@@ -3,6 +3,7 @@ import Login from '@/components/Login.vue';
 import Dashboard from '@/components/Dashboard.vue';
 import Catalogos from '@/components/Catalogos.vue';
 
+
 const routes = [
   { path: '/', redirect: '/login' },  // Redirige a login al entrar en la raíz
   { 

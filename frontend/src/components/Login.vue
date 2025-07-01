@@ -12,7 +12,22 @@
 
           <div class="mb-3">
             <label class="form-label text-success">Contraseña</label>
-            <input v-model="password" type="password" class="form-control border-success" required>
+            <div class="input-group">
+              <input
+                v-model="password"
+                :type="showPassword ? 'text' : 'password'"
+                class="form-control border-success"
+                required
+              >
+              <button
+                type="button"
+                class="btn btn-outline-success"
+                @click="togglePasswordVisibility"
+                tabindex="-1"
+              >
+                {{ showPassword ? 'Ocultar' : 'Ver' }}
+              </button>
+            </div>
           </div>
 
           <button type="submit" class="btn btn-success w-100 shadow-sm">Ingresar</button>
@@ -24,17 +39,18 @@
   </div>
 </template>
 
-
 <script>
 import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import api from '@/api'; // Ajusta la ruta según tu estructura
+
 export default {
   setup() {
     const username = ref('');
     const password = ref('');
     const error = ref('');
+    const showPassword = ref(false); // Variable para alternar visibilidad de la contraseña
     const router = useRouter();
 
     onMounted(() => {
@@ -73,7 +89,11 @@ export default {
       }
     };
 
-    return { username, password, error, login };
+    const togglePasswordVisibility = () => {
+      showPassword.value = !showPassword.value; // Alternar la visibilidad de la contraseña
+    };
+
+    return { username, password, error, login, showPassword, togglePasswordVisibility };
   }
 };
 </script>
